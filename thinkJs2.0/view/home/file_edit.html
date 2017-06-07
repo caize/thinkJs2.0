@@ -1,0 +1,54 @@
+{% extends "./header.html" %}
+
+{% block right %}
+<link href="/static/css/layui.css" rel='stylesheet'/>
+<script src="/static/js/layui.js"></script>
+<div class="layui-tab layui-tab-brief">
+  <ul class="layui-tab-title">
+    <li onclick="window.location.href='/file'">文件列表</li>
+    <li class="layui-this">{{title}}</li>
+  </ul>
+  <div class="layui-tab-content" style="height:800px">
+    <div class="layui-tab-item layui-show">
+   		<br/>
+		<form class="layui-form layui-form-pane" action="/file/add" enctype="multipart/form-data" method="post">
+		  <input type="hidden" name="id" value="{{data.id}}"/>
+		  {% if data.id>0 %}
+		 	 <div class="layui-form-item">
+			    <label class="layui-form-label">文件名</label>
+			    <div class="layui-input-block">
+			      <input type="text" readonly autocomplete="off"  value="{{data.name}}" class="layui-input">
+			    </div>
+			 </div>
+		  {% else %}
+		  	<div class="layui-form-item">
+			    <label class="layui-form-label">上传文件</label>
+			    <div class="layui-input-block">
+			      <input type="file" name="file" autocomplete="off"  class="layui-input">
+			    </div>
+			 </div>
+		  {% endif %}
+		  <div class="layui-form-item layui-form-text">
+		    <label class="layui-form-label">文件描述</label>
+		    <div class="layui-input-block">
+		      <textarea class="layui-textarea" name="intro">{{data.intro}}</textarea>
+		    </div>
+		  </div>
+		  <div class="layui-form-item">
+		    <button class="layui-btn" lay-submit="" lay-filter="demo2">保存</button>
+		  </div>
+		</form>
+    </div>
+  </div>
+</div>
+<script>
+layui.use('form', function(){
+  var $ = layui.jquery, form = layui.form();
+  $(function(){
+	  if('{{flag}}' == '1'){
+		  layer.msg('修改成功');
+	  }
+  })
+});
+</script>
+{% endblock %}

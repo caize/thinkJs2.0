@@ -1,0 +1,51 @@
+{% extends "./header.html" %}
+
+{% block right %}
+<link href="/static/css/layui.css" rel='stylesheet'/>
+<script src="/static/js/layui.js"></script>
+<div class="layui-tab layui-tab-brief">
+  <ul class="layui-tab-title">
+    <li onclick="window.location.href='/menu'">菜单列表</li>
+    <li class="layui-this">{{title}}</li>
+  </ul>
+  <div class="layui-tab-content" style="height:800px">
+    <div class="layui-tab-item layui-show">
+   		<br/>
+		<form class="layui-form layui-form-pane" action="/menu/add">
+		  <input type="hidden" name="id" value="{{data.id}}"/>
+		  <div class="layui-form-item">
+		    <label class="layui-form-label">菜单名称</label>
+		    <div class="layui-input-block">
+		      <input type="text" name="name" value="{{data.name}}" autocomplete="off"  class="layui-input">
+		    </div>
+		  </div>
+		  <div class="layui-form-item">
+		    <label class="layui-form-label">菜单路径</label>
+		    <div class="layui-input-block">
+		      <input type="text" name="url" value="{{data.url}}" autocomplete="off" class="layui-input">
+		    </div>
+		  </div>
+		  <div class="layui-form-item">
+		    <label class="layui-form-label">排序码</label>
+		    <div class="layui-input-block">
+		      <input type="text" name="code" value="{{data.code}}" autocomplete="off" class="layui-input">
+		    </div>
+		  </div>
+		  <div class="layui-form-item">
+		    <button class="layui-btn" lay-submit="" lay-filter="demo2">保存</button>
+		  </div>
+		</form>
+    </div>
+  </div>
+</div>
+<script>
+layui.use('form', function(){
+  var $ = layui.jquery, form = layui.form();
+  $(function(){
+	  if('{{flag}}' == '1'){
+		  layer.msg('修改成功');
+	  }
+  })
+});
+</script>
+{% endblock %}

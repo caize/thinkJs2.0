@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>thinkJs</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link href="/static/css/layui.css" rel="stylesheet">
+    <link href="/static/css/global.css" rel="stylesheet">
+    <script src="/static/js/layui.js"></script>
+</head>
+<body>
+	<div class="layui-layout-admin">
+        <div class="layui-header header">
+            <div class="layui-main">
+                <a class="logo">
+                    thinkJs2.0 & layui
+                </a>
+                <div class="lang">
+                    <a href="##">登录</a> | <a href="##">注册</a>
+                </div>
+                <div class="lang">
+                    <a href="/menu">菜单配置</a> 
+                </div>
+            </div>
+        </div>
+        <div class="layui-side layui-bg-black">
+            <div class="layui-side-scroll">
+                <ul class="layui-nav layui-nav-tree site-demo-nav">
+                 {%for item in menu %}
+                 	<li class="layui-nav-item {% if url==item.url %}layui-this{% endif %}">
+                  		<a href="{{item.url}}">{{item.name}}</a>
+                   </li>
+                 {% endfor %}
+                </ul>
+            </div>
+            <a href="##" class="side-contact">
+                thinkJs  &  layui
+            </a>
+        </div>
+        <div class="layui-body layui-tab-content">
+            <section class="right">
+			  {% block right %}
+			  
+			  {% endblock %}
+			</section>
+        </div>
+        <div class="layui-footer footer">
+            <div class="layui-main">© 2017-06-06</div>
+        </div>
+    </div>
+    <script>
+    	layui.use('element', function () {
+	        var element = layui.element(); 
+	    });
+	</script>
+</body>
+</html>

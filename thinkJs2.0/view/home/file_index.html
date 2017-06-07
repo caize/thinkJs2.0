@@ -1,0 +1,136 @@
+{% extends "./header.html" %}
+
+{% block right %}
+<link href="/static/css/layui.css" rel='stylesheet'/>
+<script src="/static/js/layui.js"></script>
+<div class="layui-tab layui-tab-brief">
+  <ul class="layui-tab-title">
+    <li class="layui-this">文件列表</li>
+    <li onclick="window.location.href='/file/edit'">新增</li>
+  </ul>
+  <div class="layui-tab-content" style="height:800px">
+    <div class="layui-tab-item layui-show">
+		<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+		  <legend>文件信息
+		 	 <a id='show_a' onclick="showSearch(this)" class="layui-icon" style="font-size:30px;cursor:pointer">&#xe619;</a>
+		  </legend>
+		  <div id='searchArea' style='display:none'>
+		  	<br>
+		  	<form id="searchForm" class="layui-form layui-form-pane" action="/file">
+			  <div class="layui-form-item">
+			    <label class="layui-form-label" style='background:none;'>
+			    	<i onclick="search()" class="layui-icon" style="font-size:30px;cursor:pointer">&#xe615;</i>
+			    </label>
+			    <div class="layui-input-block" style='border-left:none'>
+			      <input placeholder="输入要查找的内容" style='border-left:none' type="text" name="searchText" value="{{searchText}}" autocomplete="off"  class="layui-input">
+			    </div>
+			  </div>
+			  </form>
+		  </div>
+		</fieldset>
+		<div class="layui-form">
+		  <table class="layui-table">
+		    <colgroup>
+		      <col width="10">
+		      <col width="10">
+		      <col width="250">
+		      <col width="150">
+		      <col width="150">
+		      <col width="150">
+		      <col width="150">
+		    </colgroup>
+		    <thead>
+		      <tr>
+		        <th><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose"></th>
+		        <th>序号</th>
+		        <th>文件名</th>
+		        <th>文件大小</th>
+		        <th>文件描述</th>
+		        <th>操作</th>
+		      </tr> 
+		    </thead>
+		    <tbody>
+		      {%for item in data %}
+		      <tr>
+		        <td><input type="checkbox" name="" lay-skin="primary"></td>
+		        <td>{{ loop.index + dataCount.numsPerPage*(dataCount.currentPage - 1)}}</td>
+		        <td>{{ item.name }}</td>
+		        <td>{{ item.size }}b</td>
+		        <td>{{ item.intro }}</td>
+		        <td>
+		        	<button onclick="edit('{{ item.id }}')" class="layui-btn layui-btn-small"><i class="layui-icon">&#xe642;</i></button>
+		        	<button onclick="del('{{ item.id }}')" class="layui-btn layui-btn-small layui-btn-danger"><i class="layui-icon">&#xe640;</i></button>
+		        	<button onclick="load('{{ item.path }}')" class="layui-btn layui-btn-small"><i class="layui-icon">&#xe601;</i></button>
+		        </td>
+		      </tr>
+		      {% endfor %}
+		    </tbody>
+		  </table>
+		  <div id="page"></div>
+		</div>
+    </div>
+  </div>
+</div>
+<script>
+layui.use('form', function(){
+  var $ = layui.jquery, form = layui.form(),layer = layui.layer;
+  $(function(){
+	  if('{{searchText}}' != ''){
+		  showSearch($('#show_a')[0]);
+	  }
+  })
+  //全选
+  form.on('checkbox(allChoose)', function(data){
+    var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+    child.each(function(index, item){
+      item.checked = data.elem.checked;
+    });
+    form.render('checkbox');
+  });
+});
+layui.use('element', function(){
+  var element = layui.element(); //Tab的切换功能，切换事件监听等，需要依赖element模块
+});
+layui.use(['laypage', 'layer'], function(){
+	  var laypage = layui.laypage
+	  ,layer = layui.layer;
+	  laypage({
+	    cont: 'page'
+	    ,pages: {{dataCount.totalPages}} //总页数
+	    ,groups: 5 //连续显示分页数
+	    ,skip: true
+	    ,curr: {{dataCount.currentPage}}
+	    ,jump: function(obj, first){
+	        if(!first){
+	            window.location.href='/file?page='+obj.curr;
+	          }
+	    }
+	  });
+});
+function edit(id){
+	window.location.href='/file/edit?id='+id;
+}
+function del(id){
+	layer.confirm('是否删除该文件',function(){
+		window.location.href='/file/del?id='+id;
+	});
+}
+function load(path){
+	window.location.href='/file/load?path='+path;
+}
+function showSearch(o){
+	var $ = layui.jquery;
+	if($('#searchArea').css('display') == 'none'){
+		o.innerHTML = '&#xe61a;';
+		$('#searchArea').show();
+	}else{
+		o.innerHTML = '&#xe619';
+		$('#searchArea').hide();
+	}
+}
+function search(){
+	var $ = layui.jquery;
+	$('#searchForm').submit();
+}
+</script>
+{% endblock %}

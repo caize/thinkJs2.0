@@ -1,0 +1,72 @@
+{% extends "./header.html" %}
+
+{% block right %}
+<link href="/static/css/layui.css" rel='stylesheet'/>
+<script src="/static/js/layui.js"></script>
+<div class="layui-tab layui-tab-brief">
+  <ul class="layui-tab-title">
+    <li onclick="window.location.href='/user'">用户列表</li>
+    <li class="layui-this">{{title}}</li>
+  </ul>
+  <div class="layui-tab-content" style="height:800px">
+    <div class="layui-tab-item layui-show">
+   		<br/>
+		<form class="layui-form layui-form-pane" action="/user/add">
+		  <input type="hidden" name="id" value="{{data.id}}"/>
+		  <div class="layui-form-item">
+		    <label class="layui-form-label">真实姓名</label>
+		    <div class="layui-input-block">
+		      <input type="text" name="name" value="{{data.name}}" autocomplete="off"  class="layui-input">
+		    </div>
+		  </div>
+		  <div class="layui-form-item">
+		    <label class="layui-form-label">QQ号码</label>
+		    <div class="layui-input-block">
+		      <input type="text" name="qq" value="{{data.qq}}" autocomplete="off" class="layui-input">
+		    </div>
+		  </div>
+		  <div class="layui-form-item">
+		    <label class="layui-form-label">技术方向</label>
+		    <div class="layui-input-block">
+		      <select name="interest">
+		        <option value=""></option>
+		        <option value="0" {% if data.interest==0 %}selected{% endif %}>前端</option>
+		        <option value="1" {% if data.interest==1 %}selected{% endif %}>后端</option>
+		      </select>
+		    </div>
+		  </div>
+		  <div class="layui-form-item">
+		    <label class="layui-form-label">性别</label>
+		    <div class="layui-input-block">
+		      <select name="sex">
+		        <option value=""></option>
+		        <option value="0" {% if data.sex==0 %}selected{% endif %}>男</option>
+		        <option value="1" {% if data.sex==1 %}selected{% endif %}>女</option>
+		        <option value="2" {% if data.sex==2 %}selected{% endif %}>不详</option>
+		      </select>
+		    </div>
+		  </div>
+		  <div class="layui-form-item layui-form-text">
+		    <label class="layui-form-label">个性签名</label>
+		    <div class="layui-input-block">
+		      <textarea class="layui-textarea" name="intro">{{data.intro}}</textarea>
+		    </div>
+		  </div>
+		  <div class="layui-form-item">
+		    <button class="layui-btn" lay-submit="" lay-filter="demo2">保存</button>
+		  </div>
+		</form>
+    </div>
+  </div>
+</div>
+<script>
+layui.use('form', function(){
+  var $ = layui.jquery, form = layui.form();
+  $(function(){
+	  if('{{flag}}' == '1'){
+		  layer.msg('修改成功');
+	  }
+  })
+});
+</script>
+{% endblock %}
